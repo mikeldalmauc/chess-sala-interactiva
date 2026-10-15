@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-*
+public/stockfish
+scripts/e2e
+.git
+.github
+.devcontainer
+README.md

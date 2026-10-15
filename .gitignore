@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-*
+public/stockfish
+scripts/e2e/out
+scripts/e2e/node_modules
+scripts/e2e/package*.json
+*.log
+.DS_Store

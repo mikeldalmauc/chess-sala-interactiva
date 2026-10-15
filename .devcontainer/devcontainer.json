@@ -1,0 +1,20 @@
+{
+  "name": "Ajedrez mesa táctil",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "dev",
+  "workspaceFolder": "/app",
+  "overrideCommand": true,
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "Vite (npm run dev)", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+services:
+  # Contenedor de desarrollo (no hace falta Node en el PC).
+  #   docker compose up dev                     -> servidor Vite en http://localhost:5173
+  #   docker compose run --rm dev npm run build -> compila en ./dist
+  # El código se monta como volumen (./ -> /app) y node_modules vive en un volumen propio.
+  dev:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+
+  # Imagen de producción: build de Vite servido por nginx.
+  #   docker compose up --build web -> http://localhost:8080
+  web:
+    build:
+      context: .
+      args:
+        BASE_PATH: /
+    ports:
+      - "8080:80"
+
+  # Prueba en un navegador real (Chromium) de la web ya compilada en ./dist.
+  #   docker compose run --rm e2e
+  # Guarda capturas en scripts/e2e/out/. Si existe ./dist-pages también prueba la ruta base de GitHub Pages.
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.64.1-noble
+    profiles: ["test"]
+    ipc: host
+    working_dir: /e2e
+    command: sh -c "npm install --no-audit --no-fund playwright@1.64.1 && node check.mjs"
+    volumes:
+      - ./scripts/e2e:/e2e
+      - ./dist:/dist:ro
+      - ./dist-pages:/dist-pages:ro
+      - e2e_modules:/e2e/node_modules
+
+volumes:
+  node_modules:
+  e2e_modules:
