@@ -60,7 +60,7 @@ export function PlayerPanel(p: PlayerPanelProps) {
         {p.subtitle && <span className="sub">{p.subtitle}</span>}
         {p.check && <span className="badge">¡Jaque!</span>}
         <span className="status">
-          {p.active && <span className="dot" />}
+          {p.active && <span className="status-dot" />}
           {p.statusText}
         </span>
       </div>

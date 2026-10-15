@@ -431,7 +431,7 @@ img {
   white-space: nowrap;
 }
 
-.dot {
+.status-dot {
   width: 0.75rem;
   height: 0.75rem;
   border-radius: 50%;
@@ -578,24 +578,32 @@ img {
   );
 }
 
+/* Jugadas legales: un punto pequeño y translúcido en el centro de la casilla.
+   Ajustar tamaño con --dot-size y opacidad con --dot-alpha. */
+.board {
+  --dot-size: 30%;
+  --dot-alpha: 0.15;
+}
+
 .sq.dot::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 32%;
-  height: 32%;
+  width: var(--dot-size);
+  height: var(--dot-size);
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(0, 0, 0, var(--dot-alpha));
   pointer-events: none;
 }
 
+/* Captura posible: anillo fino y translúcido alrededor de la pieza rival */
 .sq.ring::after {
   content: '';
   position: absolute;
   inset: 0;
-  border: calc(var(--sq) * 0.09) solid rgba(0, 0, 0, 0.18);
+  border: calc(var(--sq) * 0.075) solid rgba(0, 0, 0, var(--dot-alpha));
   border-radius: 50%;
   pointer-events: none;
 }

@@ -133,6 +133,28 @@ try {
   await sq('e7').click();
   const dots = await page.locator('.sq.dot').count();
   check('al seleccionar e7 se marcan 2 jugadas legales', dots === 2, String(dots));
+  const boardBox = await page.locator('.board').boundingBox();
+  const e6Box = await sq('e6').boundingBox();
+  check(
+    'la casilla destino conserva su tamaño',
+    Math.abs(e6Box.width - boardBox.width / 8) < 1.5 && Math.abs(e6Box.height - boardBox.height / 8) < 1.5,
+    `${e6Box.width.toFixed(1)} px frente a ${(boardBox.width / 8).toFixed(1)} px`,
+  );
+  const dotStyle = await sq('e6').evaluate((el) => {
+    const cs = getComputedStyle(el, '::after');
+    return { w: parseFloat(cs.width), bg: cs.backgroundColor };
+  });
+  check(
+    'el punto mide un 30 % de la casilla y es translúcido',
+    Math.abs(dotStyle.w - e6Box.width * 0.3) < 1.5 && dotStyle.bg === 'rgba(0, 0, 0, 0.15)',
+    `${dotStyle.w.toFixed(1)} px, ${dotStyle.bg}`,
+  );
+  await page.locator('.board').screenshot({ path: join(OUT, '02b-jugadas-legales.png') });
+  // Misma casilla con "última jugada" y "seleccionada" a la vez: debe verse el estilo de selección
+  await page.evaluate(() => document.querySelector('[data-square="e4"]').classList.add('selected'));
+  const e4bg = await page.locator('[data-square="e4"]').evaluate((el) => getComputedStyle(el, '::before').backgroundColor);
+  check('seleccionada gana a última jugada en la misma casilla', e4bg === 'rgba(20, 85, 30, 0.5)', e4bg);
+  await page.evaluate(() => document.querySelector('[data-square="e4"]').classList.remove('selected'));
   await sq('e5').click();
   check('e7-e5', await hasPiece('e5'));
 
@@ -148,7 +170,10 @@ try {
   await tap('c2', 'c3');
   await tap('g8', 'f6');
   await tap('d2', 'd4');
-  await tap('e5', 'd4');
+  await sq('e5').click();
+  check('captura posible marcada con anillo en d4', (await page.locator('.sq.ring[data-square="d4"]').count()) === 1);
+  await page.locator('.board').screenshot({ path: join(OUT, '03a-captura-posible.png') });
+  await sq('d4').click();
   await tap('c3', 'd4');
   await tap('c5', 'b4');
   check('jaque resaltado en e1', (await page.locator('.sq.check[data-square="e1"]').count()) === 1);

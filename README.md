@@ -84,7 +84,7 @@ El workflow `.github/workflows/deploy.yml` se ejecuta en cada push a `main`:
 
 ```bash
 docker compose run --rm dev npm run build   # genera ./dist
-docker compose run --rm e2e                 # 22 comprobaciones; la primera vez descarga la imagen de Playwright
+docker compose run --rm e2e                 # 26 comprobaciones; la primera vez descarga la imagen de Playwright
 ```
 
 Si además existe `./dist-pages` (un build con `BASE_PATH=/chess-sala-interactiva/`), comprueba también que la web funciona bajo la subruta de GitHub Pages.
@@ -153,6 +153,7 @@ Si el motor no se puede cargar, la máquina sigue jugando con jugadas legales al
 ## Personalizar
 
 - **Colores del tablero**: `THEMES` en `src/themes.ts`.
+- **Punto de jugada legal**: tamaño y opacidad en las variables `--dot-size` y `--dot-alpha` de `.board`, en `src/styles.css`.
 - **Juegos de piezas**: añade una carpeta en `public/pieces/<nombre>/` con `wK.svg`, `wQ.svg`, … `bP.svg` y regístrala en `PIECE_SETS` en `src/themes.ts`.
 - **Niveles**: tabla `LEVELS` en `src/engine.ts`.
 - **Tiempos del menú**: listas de minutos e incrementos en `src/components/Menu.tsx`.
