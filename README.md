@@ -76,7 +76,7 @@ El workflow `.github/workflows/deploy.yml` se ejecuta en cada push a `main`:
 2. Compila con `BASE_PATH=/<nombre-del-repositorio>/`, que es la ruta en la que GitHub Pages sirve el sitio.
 3. Sube la carpeta `dist` y la publica.
 
-La primera vez, el propio workflow intenta activar GitHub Pages en el repositorio. Si ese paso falla por permisos, actívalo a mano en *Settings → Pages → Source: GitHub Actions* y vuelve a lanzar el workflow.
+**Antes del primer despliegue** hay que activar Pages una vez a mano, porque el token del workflow no tiene permiso para crear el sitio: en el repositorio, *Settings → Pages → Build and deployment → Source: GitHub Actions*. Después, cada push a `main` publica la web; también se puede lanzar a mano desde la pestaña *Actions* (*Run workflow*).
 
 ## Pruebas en un navegador real
 
